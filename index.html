@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carlos Borcem - Advogado</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff; 
+            background-color: #0f172a; 
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- NAVBAR FLUTUANTE (GLASSMORPHISM) --- */
+        .navbar-container {
+            position: fixed; /* Fixa na tela ao rolar */
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            width: 100%;
+            max-width: 1100px; /* Largura máxima para não esticar demais em monitores grandes */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            
+            /* O Efeito de Vidro */
+            background: rgba(15, 23, 42, 0.6); /* Fundo escuro semi-transparente */
+            backdrop-filter: blur(12px); /* O desfoque do fundo */
+            -webkit-backdrop-filter: blur(12px); /* Compatibilidade Safari */
+            
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Borda fina e sutil */
+            border-radius: 16px; /* Arredondamento elegante */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Sombra suave */
+        }
+
+        .logo { 
+            display: flex; align-items: center; gap: 10px; 
+            font-size: 1.2rem; font-weight: 700; color: #fff; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { font-size: 0.95rem; font-weight: 500; color: #cbd5e1; position: relative; }
+        
+        /* Efeito hover no link (linha dourada abaixo) */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #eab308;
+            transition: width 0.3s;
+        }
+        .nav-links a:hover { color: #fff; }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* --- HERO --- */
+        .hero {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 0 20px;
+            
+            background-image: url('img/fundo.png');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+        }
+
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(16, 29, 56, 0.9);
+            z-index: 1;
+        }
+
+        .hero-content { position: relative; z-index: 2; max-width: 800px; width: 100%; padding-top: 80px; /* Espaço extra por causa do menu fixo */ }
+
+        /* Elementos */
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            border: 1px solid #b47819; padding: 6px 16px; border-radius: 50px;
+            color: #eab308; font-size: 0.9rem; font-weight: 600; margin-bottom: 25px;
+            background-color: rgba(0,0,0,0.3);
+        }
+
+        .hero h1 { font-size: 4rem; font-weight: 700; margin-bottom: 15px; line-height: 1.1; }
+        
+        .divider {
+            width: 80px; height: 3px; background: #eab308;
+            margin: 15px auto 30px auto; border-radius: 2px;
+        }
+
+        .hero h2 { font-size: 1.3rem; font-weight: 400; margin-bottom: 20px; color: #f3f4f6; }
+        
+        .hero p { 
+            font-size: 1rem; color: #cbd5e1; line-height: 1.6; 
+            margin-bottom: 50px; max-width: 700px; margin-left: auto; margin-right: auto; 
+        }
+
+        /* Botões */
+        .cta-group { display: flex; justify-content: center; gap: 20px; margin-bottom: 60px; }
+        
+        .btn { 
+            padding: 14px 32px; border-radius: 6px; font-weight: 600; font-size: 1rem; 
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; 
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-primary { background-color: #d9820a; color: #fff; border: none; }
+        .btn-primary:hover { background-color: #b46c07; }
+        
+        .btn-outline { background-color: transparent; border: 2px solid #4b5563; color: #e5e7eb; }
+        .btn-outline:hover { border-color: #fff; background-color: rgba(255,255,255,0.1); }
+
+        .scroll-icon {
+            position: relative; width: 24px; height: 40px; border: 2px solid #9ca3af; border-radius: 12px; margin: 0 auto;
+        }
+        .scroll-icon::before {
+            content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px; background-color: #fff; border-radius: 50%;
+            animation: scroll 2s infinite;
+        }
+        @keyframes scroll { 0% { top: 6px; opacity: 1; } 100% { top: 18px; opacity: 0; } }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 768px) {
+            /* Ajuste Navbar Mobile */
+            .navbar-container {
+                top: 10px;
+                padding: 0 10px;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links a { font-size: 0.85rem; }
+
+            /* Ajuste Texto Hero */
+            .hero h1 { font-size: 2.5rem; }
+            .hero h2 { font-size: 1.1rem; }
+            
+            .cta-group { flex-direction: column; width: 100%; gap: 15px; }
+            .btn { width: 100%; }
+        }
+        /* --- CSS DA SESSÃO SOBRE --- */
+
+.sobre-section {
+    width: 100%;
+    padding: 100px 5%;
+    background-color: #ffffff; /* Fundo Branco Limpo */
+    color: #334155; /* Cor de texto cinza escuro para leitura */
+}
+
+.container-sobre {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+/* --- Coluna de Texto --- */
+.sobre-texto {
+    flex: 1; /* Ocupa 50% ou o espaço disponível */
+}
+
+.badge-sobre {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: #fef3c7; /* Amarelo bem claro */
+    color: #d97706; /* Dourado escuro */
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sobre-texto h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0f172a; /* Azul escuro (mesmo do hero) */
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.divider-sobre {
+    width: 60px;
+    height: 4px;
+    background-color: #d97706;
+    margin-bottom: 25px;
+    border-radius: 2px;
+}
+
+.sobre-texto p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    color: #475569;
+}
+
+.destaque-texto {
+    font-weight: 600;
+    color: #0f172a !important; /* Um pouco mais escuro para destacar */
+    border-left: 3px solid #d97706;
+    padding-left: 15px;
+}
+
+/* --- Coluna Visual (Imagem) --- */
+.sobre-visual {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+/* O quadrado azul escuro de fundo da imagem */
+.card-foto {
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1 / 1; /* Garante que seja quadrado */
+    background-color: #0f172a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta a imagem dentro do quadrado */
+}
+
+/* Card Flutuante OAB */
+.card-flutuante {
+    position: absolute;
+    bottom: -20px;
+    right: 20px; /* Ajuste conforme a largura da imagem */
+    background-color: #ffffff;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid #e2e8f0;
+}
+
+.icon-oab {
+    font-size: 1.8rem;
+    color: #d97706;
+}
+
+.info-oab {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-oab strong {
+    font-size: 1rem;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.info-oab span {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+/* --- RESPONSIVIDADE (CELULAR) --- */
+@media (max-width: 900px) {
+    .container-sobre {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .sobre-texto {
+        text-align: left; /* Mantém alinhado a esquerda ou center se preferir */
+    }
+
+    .sobre-texto h2 {
+        font-size: 2rem;
+    }
+    
+    .sobre-visual {
+        width: 100%;
+    }
+
+    .card-foto {
+        max-width: 100%; /* Ocupa a largura do celular */
+    }
+
+    .card-flutuante {
+        right: 10px;
+        bottom: -15px;
+        padding: 10px 20px;
+    }
+}
+
+
+/* --- SESSÃO ATUAÇÃO (DARK MODE) --- */
+.atuacao-section {
+    padding: 100px 20px;
+    background-color: #0f172a; /* Fundo Azul Escuro (Igual ao Hero) */
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Adiciona um padrão sutil ao fundo para não ficar "chapado" */
+.atuacao-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: radial-gradient(#1e293b 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.container-atuacao {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative; z-index: 2;
+}
+
+.header-atuacao { margin-bottom: 60px; }
+
+.badge-atuacao {
+    background: rgba(217, 119, 6, 0.15); /* Fundo transparente laranja */
+    color: #fbbf24; /* Texto Amarelo Brilhante */
+    padding: 6px 16px; 
+    border: 1px solid #d97706;
+    border-radius: 50px; 
+    font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+}
+
+.header-atuacao h2 { 
+    font-size: 2.5rem; 
+    color: #ffffff; /* Título Branco */
+    margin: 20px 0 15px 0; 
+    font-family: 'Playfair Display', serif;
+}
+
+.divider-atuacao { 
+    width: 60px; height: 3px; background: #d97706; margin: 0 auto 20px auto; 
+}
+
+.subtitulo-atuacao { 
+    color: #cbd5e1; /* Cinza claro para leitura no escuro */
+    max-width: 600px; margin: 0 auto; font-size: 1rem; 
+}
+
+/* --- SLIDER CONTAINER --- */
+.slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 480px; /* Altura ajustada para os cards */
+}
+
+.card-list {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px; 
+}
+
+/* --- CARD ITEM (Mantendo Branco para Contraste) --- */
+.card-item {
+    position: absolute;
+    width: 340px;
+    background: #ffffff; /* Card Branco */
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2); /* Sombra mais forte */
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    /* Estado padrão (escondido/atrás) */
+    opacity: 0; 
+    z-index: 0;
+    transform: scale(0.8) translateX(0);
+}
+
+/* --- CARD ATIVO --- */
+.card-item.active {
+    opacity: 1;
+    z-index: 10;
+    transform: scale(1) translateX(0);
+    filter: blur(0);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); /* Destaque forte */
+    border: none; /* Remove borda se houver */
+}
+
+/* --- ESTADOS LATERAIS (PREV/NEXT) --- */
+.card-item.prev {
+    opacity: 0.3; /* Mais transparente para fundir com o escuro */
+    z-index: 2;
+    transform: translateX(-75%) scale(0.85); 
+    filter: blur(2px);
+    pointer-events: none;
+}
+
+.card-item.next {
+    opacity: 0.3;
+    z-index: 2;
+    transform: translateX(75%) scale(0.85);
+    filter: blur(2px);
+    pointer-events: none;
+}
+
+/* CONTEÚDO DO CARD (Texto Escuro pois o card é Branco) */
+.icon-box {
+    width: 70px; height: 70px; 
+    background: #0f172a; /* Fundo do ícone Escuro */
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; color: #fbbf24; /* Ícone Amarelo */
+    margin-bottom: 20px;
+}
+
+.card-item h3 { 
+    font-size: 1.4rem; color: #0f172a; /* Título Escuro */
+    margin-bottom: 15px; font-weight: 700; 
+}
+
+.card-item p { 
+    font-size: 0.95rem; color: #475569; /* Texto Cinza Escuro */
+    line-height: 1.6; margin-bottom: 25px; 
+}
+
+.card-link { 
+    color: #d97706; font-weight: 600; font-size: 0.9rem; 
+    display: flex; align-items: center; gap: 5px; 
+}
+.card-link:hover { gap: 10px; }
+
+/* BOTÕES DE NAVEGAÇÃO */
+.nav-btn {
+    background: rgba(255,255,255,0.1); /* Botão Translúcido */
+    border: 1px solid rgba(255,255,255,0.2);
+    width: 50px; height: 50px; border-radius: 50%;
+    cursor: pointer; color: #fff; font-size: 1.2rem;
+    z-index: 20; transition: 0.3s; position: absolute;
+    backdrop-filter: blur(5px);
+}
+.nav-btn:hover { background: #d97706; border-color: #d97706; color: #fff; }
+.prev-btn { left: 0; }
+.next-btn { right: 0; }
+
+/* DOTS */
+.dots-container { margin-top: 10px; display: flex; justify-content: center; gap: 10px; }
+.dot { width: 12px; height: 12px; background: #475569; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+.dot.active { background: #d97706; width: 30px; border-radius: 10px; }
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+    .card-item { width: 280px; }
+    .card-item.prev { transform: translateX(-45%) scale(0.8); opacity: 0.2; }
+    .card-item.next { transform: translateX(45%) scale(0.8); opacity: 0.2; }
+    .nav-btn { display: none; } /* Remove botões no mobile */
+}
+
+/* --- SESSÃO EXPERIÊNCIA --- */
+.experiencia-section {
+    width: 100%;
+    padding: 100px 5%;
+    background-color: #ffffff; /* Fundo Branco */
+    color: #334155;
+}
+
+.container-experiencia {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Cabeçalhos */
+.header-center {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.badge-trajetoria {
+    background-color: #fef3c7; color: #d97706;
+    padding: 6px 16px; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+}
+
+.header-center h2 {
+    font-size: 2.5rem; color: #0f172a;
+    margin: 15px 0 10px 0; font-weight: 700;
+}
+
+.divider-center {
+    width: 60px; height: 3px; background-color: #d97706;
+    margin: 0 auto; border-radius: 2px;
+}
+
+/* --- CARD GRANDE (EXPERIÊNCIA) --- */
+.card-experiencia-large {
+    background-color: #f8fafc; /* Cinza muito leve, quase branco */
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 60px; /* Espaço até a formação */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.exp-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 20px;
+}
+
+.exp-icon-box {
+    width: 60px; height: 60px;
+    background-color: #0f172a; /* Azul escuro */
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: #eab308; font-size: 1.5rem;
+    flex-shrink: 0; /* Não deixa o ícone esmagar */
+}
+
+.exp-info h3 {
+    font-size: 1.4rem; color: #0f172a; margin-bottom: 5px; font-weight: 700;
+}
+
+.exp-meta {
+    font-size: 0.95rem; color: #d97706; font-weight: 500;
+}
+.exp-meta .separator { margin: 0 8px; color: #cbd5e1; }
+
+.exp-lista {
+    list-style: none; padding-left: 10px;
+}
+
+.exp-lista li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 12px;
+    font-size: 1rem; color: #475569;
+    line-height: 1.6;
+}
+
+/* A bolinha laranja da lista */
+.exp-lista li::before {
+    content: '•';
+    position: absolute; left: 0; top: 0px;
+    color: #d97706; font-size: 1.5rem; line-height: 1;
+}
+
+/* --- FORMAÇÃO ACADÊMICA --- */
+.titulo-academico {
+    text-align: center;
+    font-size: 1.8rem; color: #0f172a;
+    margin-bottom: 40px; font-weight: 700;
+    font-family: 'Playfair Display', serif; /* Opcional: se quiser dar destaque */
+}
+
+.grid-academica {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsivo automático */
+    gap: 30px;
+}
+
+.card-academico {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: flex; flex-direction: column;
+    transition: transform 0.3s;
+}
+
+.card-academico:hover {
+    transform: translateY(-5px);
+    border-color: #d97706; /* Borda laranja ao passar o mouse */
+}
+
+.icon-grad {
+    color: #d97706; font-size: 1.8rem; margin-bottom: 20px;
+}
+
+.card-academico h4 {
+    font-size: 1.1rem; color: #0f172a; font-weight: 700;
+    margin-bottom: 10px; line-height: 1.4;
+    flex-grow: 1; /* Faz os títulos alinharem o footer lá embaixo */
+}
+
+.instituicao {
+    font-size: 0.9rem; color: #64748b; margin-bottom: 25px;
+}
+
+.card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 15px;
+}
+
+.card-footer .data {
+    font-size: 0.85rem; color: #94a3b8;
+}
+
+/* Badges de Status */
+.badge-status {
+    padding: 4px 12px; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 600;
+}
+
+.badge-status.em-curso {
+    background-color: #fef3c7; color: #d97706;
+}
+
+.badge-status.concluido {
+    background-color: #e2e8f0; color: #475569;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+    .exp-header {
+        flex-direction: column;
+        align-items: flex-start; /* Alinha à esquerda no celular */
+        text-align: left;
+    }
+    
+    .exp-info h3 { font-size: 1.2rem; }
+    
+    .grid-academica {
+        grid-template-columns: 1fr; /* Um card por linha no celular */
+    }
+}
+/* --- SESSÃO CONTATO (CORRIGIDA) --- */
+.contato-section {
+    position: relative;
+    width: 100%;
+    padding: 100px 20px;
+    background-image: url('img/fundo.png');
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    color: #fff;
+}
+
+.contato-section::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.92);
+    z-index: 1;
+}
+
+.container-contato {
+    position: relative; z-index: 2;
+    max-width: 1000px; margin: 0 auto;
+}
+
+.badge-contato {
+    border: 1px solid #d97706; color: #d97706; padding: 5px 15px;
+    border-radius: 50px; font-size: 0.8rem; text-transform: uppercase; font-weight: 600;
+    background: rgba(0,0,0,0.2);
+}
+
+.header-contato h2 { font-size: 3rem; margin: 15px 0; font-family: 'Playfair Display', serif; }
+.divider-contato { width: 50px; height: 3px; background: #d97706; margin: 0 auto 20px auto; }
+.header-contato p { color: #cbd5e1; max-width: 600px; margin: 0 auto 50px auto; }
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.grid-contatos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* --- CORREÇÃO AQUI --- */
+.contact-item {
+    display: flex; 
+    align-items: center; 
+    gap: 15px;
+    background: rgba(30, 41, 59, 0.6);
+    padding: 20px; 
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: 0.3s; 
+    text-align: left;
+    
+    /* Garante que o item possa crescer em altura se o email quebrar linha */
+    height: 100%; 
+    min-height: 90px;
+}
+
+.contact-item:hover {
+    background: rgba(217, 119, 6, 0.1);
+    border-color: #d97706;
+    transform: translateY(-3px);
+}
+
+.icon-contact {
+    width: 50px; height: 50px;
+    background: #d97706; color: #fff;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; 
+    flex-shrink: 0; /* Impede o ícone de esmagar */
+}
+
+.info-contact { 
+    display: flex; 
+    flex-direction: column; 
+    
+    /* CORREÇÃO FLEXBOX: Impede o texto de empurrar a largura */
+    min-width: 0; 
+    width: 100%; 
+}
+
+.info-contact .label { 
+    font-size: 0.8rem; 
+    color: #94a3b8; 
+    text-transform: uppercase; 
+}
+
+.info-contact .value { 
+    font-size: 1rem; 
+    color: #fff; 
+    font-weight: 600; 
+    margin-top: 2px;
+    
+    /* CORREÇÃO DE QUEBRA DE LINHA PARA EMAIL */
+    word-break: break-word; /* Quebra palavras longas se necessário */
+    overflow-wrap: anywhere; /* Garante que URLs/Emails quebrem */
+    white-space: normal; /* Permite múltiplas linhas */
+}
+
+.location-item {
+    grid-column: 1 / -1;
+    justify-content: center;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    .header-contato h2 { font-size: 2rem; }
+    .grid-contatos { grid-template-columns: 1fr; }
+    
+    /* No mobile, o item de localização volta ao normal (esquerda) para alinhar com os outros */
+    .location-item { justify-content: flex-start; }
+}
+/* --- FOOTER --- */
+.main-footer {
+    background-color: #020617; /* Quase preto */
+    color: #cbd5e1;
+    padding: 60px 20px 20px 20px;
+    border-top: 1px solid #1e293b;
+}
+
+.container-footer {
+    max-width: 1100px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; /* Logo maior, links menores */
+    gap: 50px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.logo-footer {
+    font-size: 1.5rem; color: #fff; font-weight: 700; margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+}
+
+.footer-text { font-size: 0.9rem; line-height: 1.6; margin-bottom: 25px; color: #64748b; max-width: 350px; }
+
+.social-links-footer { display: flex; gap: 15px; }
+.social-links-footer a {
+    width: 40px; height: 40px; border-radius: 50%; background: #1e293b;
+    display: flex; align-items: center; justify-content: center; color: #fff; transition: 0.3s;
+}
+.social-links-footer a:hover { background: #d97706; }
+
+.footer-col h4 { color: #fff; margin-bottom: 20px; font-size: 1.1rem; }
+
+.footer-links li, .footer-contact-list li { margin-bottom: 12px; }
+.footer-links a { color: #94a3b8; font-size: 0.95rem; }
+.footer-links a:hover { color: #d97706; padding-left: 5px; }
+
+.footer-contact-list li { display: flex; gap: 10px; align-items: center; font-size: 0.9rem; }
+.footer-contact-list i { color: #d97706; }
+
+.footer-bottom {
+    padding-top: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #475569;
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    max-width: 1100px; margin: 0 auto;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    .header-contato h2 { font-size: 2rem; }
+    .grid-contatos { grid-template-columns: 1fr; } /* Um botão abaixo do outro */
+    
+    .container-footer { grid-template-columns: 1fr; gap: 30px; }
+    .footer-bottom { flex-direction: column; gap: 10px; }
+}
+    </style>
+</head>
+<body>
+
+<div class="navbar-container">
+        <nav class="navbar">
+            <div class="logo"><i class="fa-solid fa-scale-balanced"></i> Carlos Borcem</div>
+            <ul class="nav-links">
+                <li><a href="#">Início</a></li>
+                
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#atuacao">Áreas de Atuação</a></li>
+                <li><a href="#experiencia">Experiência</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </div>
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge"><i class="fa-solid fa-scale-balanced"></i> OAB • Belém/PA</div>
+            
+            <h1>Carlos Borcem</h1>
+            
+            <div class="divider"></div>
+            
+            <h2>Advogado especializado em Direito do Trabalho e Direito do Consumidor</h2>
+            
+            <p>Graduado pela Universidade Federal do Pará, com experiência na Defensoria Pública da União. Comprometido com a defesa de direitos e a busca por resultados justos.</p>
+            
+            <div class="cta-group">
+                <a href="#" class="btn btn-primary">Entrar em Contato <i class="fa-regular fa-envelope"></i></a>
+                <a href="#" class="btn btn-outline">Saiba Mais</a>
+            </div>
+            
+            <div class="scroll-icon"></div>
+        </div>
+    </section>
+<section class="sobre-section" id="sobre">
+    <div class="container-sobre">
+        
+        <div class="sobre-texto">
+            <span class="badge-sobre">Sobre o Advogado</span>
+            <h2>Advocacia com Empatia e Compromisso</h2>
+            <div class="divider-sobre"></div>
+            
+            <p>
+                Natural de Belém/PA e pessoa com deficiência (PCD), sou graduado em Direito 
+                pela Universidade Federal do Pará, com especialização em Direito do Trabalho 
+                e Direito do Consumidor.
+            </p>
+            <p>
+                Minha experiência inclui atuação na Defensoria Pública da União, onde desenvolvi 
+                habilidades em análise de processos judiciais, elaboração de peças processuais, 
+                cálculos trabalhistas e atendimento humanizado aos assistidos.
+            </p>
+            <p class="destaque-texto">
+                Acredito que o exercício da advocacia exige não apenas técnica jurídica, 
+                mas também empatia, proatividade e compromisso genuíno com resultados justos.
+            </p>
+        </div>
+
+        <div class="sobre-visual">
+            <div class="card-foto">
+                <img src="img/foto.jpg" alt="Carlos Borcem Ilustração">
+            </div>
+
+            <div class="card-flutuante">
+                <div class="icon-oab">
+                    <i class="fa-solid fa-certificate"></i>
+                </div>
+                <div class="info-oab">
+                    <strong>OAB</strong>
+                    <span>Belém/PA</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="atuacao-section" id="atuacao">
+    <div class="container-atuacao">
+        
+        <div class="header-atuacao">
+            <span class="badge-atuacao">Especialidades</span>
+            <h2>Áreas de Atuação</h2>
+            <div class="divider-atuacao"></div>
+            <p class="subtitulo-atuacao">
+                Atuação focada em áreas essenciais do direito, com expertise e dedicação
+            </p>
+        </div>
+
+        <div class="slider-container">
+            
+            <button class="nav-btn prev-btn" onclick="mudarSlide(-1)">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <div class="card-list">
+                
+                <div class="card-item" id="card-0">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-users-rays"></i>
+                    </div>
+                    <h3>Direitos Humanos</h3>
+                    <p>Experiência em casos de auxílio emergencial, direito à saúde e direitos fundamentais na DPU.</p>
+                    <a href="#" class="card-link">Saiba mais <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="card-item active" id="card-1">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <h3>Direito do Trabalho</h3>
+                    <p>Defesa em reclamações trabalhistas, cálculos, rescisões e acompanhamento processual completo.</p>
+                    <a href="#" class="card-link">Saiba mais <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="card-item" id="card-2">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h3>Direito do Consumidor</h3>
+                    <p>Revisão de contratos abusivos, indenizações e responsabilidade civil nas relações de consumo.</p>
+                    <a href="#" class="card-link">Saiba mais <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+            </div>
+
+            <button class="nav-btn next-btn" onclick="mudarSlide(1)">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+        </div>
+        
+        <div class="dots-container">
+            <span class="dot" onclick="irParaSlide(0)"></span>
+            <span class="dot active" onclick="irParaSlide(1)"></span>
+            <span class="dot" onclick="irParaSlide(2)"></span>
+        </div>
+
+    </div>
+</section>
+<section class="experiencia-section" id="experiencia">
+    <div class="container-experiencia">
+        
+        <div class="header-center">
+            <span class="badge-trajetoria">Trajetória</span>
+            <h2>Experiência Profissional</h2>
+            <div class="divider-center"></div>
+        </div>
+
+        <div class="card-experiencia-large">
+            <div class="exp-header">
+                <div class="exp-icon-box">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                
+                <div class="exp-info">
+                    <h3>Defensoria Pública da União</h3>
+                    <span class="exp-meta">
+                        <i class="fa-solid fa-location-dot"></i> Belém, Pará <span class="separator">•</span> 2020 - 2022
+                    </span>
+                </div>
+            </div>
+
+            <ul class="exp-lista">
+                <li>Atuação em casos de Auxílio Emergencial e Direito à Saúde</li>
+                <li>Elaboração de peças processuais e pesquisas jurisprudenciais</li>
+                <li>Assessoria jurídica aos assistidos</li>
+                <li>Movimentação de procedimentos de assistência judiciária</li>
+            </ul>
+        </div>
+
+        <h3 class="titulo-academico">Formação Acadêmica</h3>
+
+        <div class="grid-academica">
+            
+            <div class="card-academico">
+                <div class="icon-grad">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h4>Pós-graduação em Direito do Trabalho e Processo do Trabalho</h4>
+                <p class="instituicao">GRAN</p>
+                <div class="card-footer">
+                    <span class="data">jun. 2025 - presente</span>
+                    <span class="badge-status em-curso">Em curso</span>
+                </div>
+            </div>
+
+            <div class="card-academico">
+                <div class="icon-grad">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h4>Pós-graduação em Direito do Consumidor</h4>
+                <p class="instituicao">GRAN</p>
+                <div class="card-footer">
+                    <span class="data">out. 2025 - presente</span>
+                    <span class="badge-status em-curso">Em curso</span>
+                </div>
+            </div>
+
+            <div class="card-academico">
+                <div class="icon-grad">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h4>Bacharelado em Direito</h4>
+                <p class="instituicao">Universidade Federal do Pará</p>
+                <div class="card-footer">
+                    <span class="data">2018 - 2023</span>
+                    <span class="badge-status concluido">Concluído</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<section class="contato-section" id="contato">
+    <div class="container-contato">
+        
+        <div class="header-contato">
+            <span class="badge-contato">Entre em Contato</span>
+            <h2>Vamos Conversar</h2>
+            <div class="divider-contato"></div>
+            <p>Estou disponível para atender suas necessidades jurídicas com dedicação e profissionalismo.</p>
+        </div>
+
+        <div class="glass-card">
+            <div class="grid-contatos">
+                
+                <a href="https://wa.me/5591985031919" target="_blank" class="contact-item">
+                    <div class="icon-contact">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div class="info-contact">
+                        <span class="label">WhatsApp</span>
+                        <span class="value">(91) 98503-1919</span>
+                    </div>
+                </a>
+
+                <a href="https://instagram.com/carlosborcem.adv" target="_blank" class="contact-item">
+                    <div class="icon-contact">
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+                    <div class="info-contact">
+                        <span class="label">Instagram</span>
+                        <span class="value">@carlosborcem.adv</span>
+                    </div>
+                </a>
+
+                <a href="mailto:carlosborcemadv@gmail.com" class="contact-item">
+                    <div class="icon-contact">
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                    <div class="info-contact">
+                        <span class="label">E-mail</span>
+                        <span class="value">carlosborcemadv@gmail.com</span>
+                    </div>
+                </a>
+
+                <a href="https://www.linkedin.com/in/carlosborcem" target="_blank" class="contact-item">
+                    <div class="icon-contact">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </div>
+                    <div class="info-contact">
+                        <span class="label">LinkedIn</span>
+                        <span class="value">Carlos Borcem</span>
+                    </div>
+                </a>
+
+                <div class="contact-item location-item">
+                    <div class="icon-contact">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="info-contact">
+                        <span class="label">Localização</span>
+                        <span class="value">Belém, Pará</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer class="main-footer">
+    <div class="container-footer">
+        
+        <div class="footer-col">
+            <div class="logo-footer">
+                <i class="fa-solid fa-scale-balanced"></i> Carlos Borcem
+            </div>
+            <p class="footer-text">
+                Advocacia especializada em Direito do Trabalho e Consumidor. 
+                Compromisso com a ética, transparência e a defesa intransigente dos seus direitos.
+            </p>
+            <div class="social-links-footer">
+                <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Links Rápidos</h4>
+            <ul class="footer-links">
+                <li><a href="#">Início</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#atuacao">Áreas de Atuação</a></li>
+                <li><a href="#experiencia">Experiência</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Informações</h4>
+            <ul class="footer-contact-list">
+                <li><i class="fa-solid fa-envelope"></i> carlosborcemadv@gmail.com</li>
+                <li><i class="fa-brands fa-whatsapp"></i> (91) 98503-1919</li>
+                <li><i class="fa-solid fa-location-dot"></i> Belém/PA</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 Carlos Borcem Advocacia. Todos os direitos reservados.</p>
+        <p class="oab-info">OAB/PA Inscrito</p>
+    </div>
+</footer>
+<script>
+    let currentSlide = 1; // O card do meio (índice 1) começa ativo
+    const cards = document.querySelectorAll('.card-item');
+    const dots = document.querySelectorAll('.dot');
+
+    function atualizarClasses() {
+        cards.forEach((card, index) => {
+            card.className = 'card-item'; // Reseta classes
+            
+            if (index === currentSlide) {
+                card.classList.add('active');
+            } else if (index === currentSlide - 1 || (currentSlide === 0 && index === cards.length - 1)) {
+                // Lógica simplificada para este exemplo de 3 cards:
+                // Se for o anterior, adiciona classe prev (se quiser tratar loop infinito, precisa de mais lógica)
+                card.classList.add('prev'); 
+            } else {
+                card.classList.add('next');
+            }
+        });
+
+        // Atualiza bolinhas
+        dots.forEach(dot => dot.classList.remove('active'));
+        if(dots[currentSlide]) dots[currentSlide].classList.add('active');
+    }
+
+    function mudarSlide(direcao) {
+        currentSlide += direcao;
+        
+        // Loop infinito simples
+        if (currentSlide < 0) currentSlide = cards.length - 1;
+        if (currentSlide >= cards.length) currentSlide = 0;
+
+        atualizarClasses();
+    }
+
+    function irParaSlide(index) {
+        currentSlide = index;
+        atualizarClasses();
+    }
+    
+    atualizarClasses();
+</script>
+</body>
+</html>
