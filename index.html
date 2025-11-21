@@ -881,8 +881,8 @@
             <p>Graduado pela Universidade Federal do Pará, com experiência na Defensoria Pública da União. Comprometido com a defesa de direitos e a busca por resultados justos.</p>
             
             <div class="cta-group">
-                <a href="#" class="btn btn-primary">Entrar em Contato <i class="fa-regular fa-envelope"></i></a>
-                <a href="#" class="btn btn-outline">Saiba Mais</a>
+                <a href="#contato" class="btn btn-primary">Entrar em Contato <i class="fa-regular fa-envelope"></i></a>
+                <a href="#sobre" class="btn btn-outline">Saiba Mais</a>
             </div>
             
             <div class="scroll-icon"></div>
@@ -942,7 +942,7 @@
             </p>
         </div>
 
-        <div class="slider-container">
+        <div class="slider-container" id="slider-touch-area">
             
             <button class="nav-btn prev-btn" onclick="mudarSlide(-1)">
                 <i class="fa-solid fa-chevron-left"></i>
@@ -993,6 +993,7 @@
 
     </div>
 </section>
+
 <section class="experiencia-section" id="experiencia">
     <div class="container-experiencia">
         
@@ -1182,37 +1183,33 @@
     </div>
 </footer>
 <script>
-    let currentSlide = 1; // O card do meio (índice 1) começa ativo
+    let currentSlide = 1; 
     const cards = document.querySelectorAll('.card-item');
     const dots = document.querySelectorAll('.dot');
+    const sliderArea = document.getElementById('slider-touch-area');
 
+    // --- LÓGICA VISUAL (Girar Classes) ---
     function atualizarClasses() {
         cards.forEach((card, index) => {
-            card.className = 'card-item'; // Reseta classes
+            card.className = 'card-item'; // Reseta
             
             if (index === currentSlide) {
                 card.classList.add('active');
             } else if (index === currentSlide - 1 || (currentSlide === 0 && index === cards.length - 1)) {
-                // Lógica simplificada para este exemplo de 3 cards:
-                // Se for o anterior, adiciona classe prev (se quiser tratar loop infinito, precisa de mais lógica)
                 card.classList.add('prev'); 
             } else {
                 card.classList.add('next');
             }
         });
 
-        // Atualiza bolinhas
         dots.forEach(dot => dot.classList.remove('active'));
         if(dots[currentSlide]) dots[currentSlide].classList.add('active');
     }
 
     function mudarSlide(direcao) {
         currentSlide += direcao;
-        
-        // Loop infinito simples
         if (currentSlide < 0) currentSlide = cards.length - 1;
         if (currentSlide >= cards.length) currentSlide = 0;
-
         atualizarClasses();
     }
 
@@ -1220,7 +1217,33 @@
         currentSlide = index;
         atualizarClasses();
     }
+
+    // --- LÓGICA DE TOUCH (CELULAR) ---
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    sliderArea.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+
+    sliderArea.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, {passive: true});
+
+    function handleSwipe() {
+        // Se arrastou mais de 50px
+        if (touchEndX < touchStartX - 50) {
+            // Arrastou para a esquerda -> Próximo Slide
+            mudarSlide(1);
+        }
+        if (touchEndX > touchStartX + 50) {
+            // Arrastou para a direita -> Slide Anterior
+            mudarSlide(-1);
+        }
+    }
     
+    // Inicializa
     atualizarClasses();
 </script>
 </body>
